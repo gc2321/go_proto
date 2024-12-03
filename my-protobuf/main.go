@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"log"
-	"my-protobuf/jobsearch"
+	"my-protobuf/basic"
 	"time"
 )
 
@@ -23,6 +23,9 @@ func main() {
 	//basic.ProtoToJsonUser()
 	//basic.JsonToProtoUser()
 	//basic.BasicUserGroup()
-	jobsearch.JobSearchCandidate()
-	jobsearch.JobSearchSoftware()
+	// jobsearch.JobSearchCandidate()
+	// jobsearch.JobSearchSoftware()
+
+	//basic.BasicUnmarshalAnyKnown()
+	basic.BasicUnmarshalAnyIs()
 }
