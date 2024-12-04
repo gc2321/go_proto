@@ -24,6 +24,11 @@ func BasicUser() {
 	}
 
 	comm := randomCommunicationChannel()
+	sr := map[string]uint32{
+		"fly":        5,
+		"speed":      5,
+		"durability": 4,
+	}
 
 	u := basic.User{
 		Id:                   99,
@@ -33,7 +38,8 @@ func BasicUser() {
 		Emails:               []string{"superman@example.com", "superman@dc.com"},
 		Gender:               basic.Gender_GENDER_MALE,
 		Address:              &addr,
-		CommunicationChannel: &comm,
+		CommunicationChannel: comm,
+		SkillRating:          sr,
 	}
 
 	jsonBytes, _ := protojson.Marshal(&u)
@@ -65,7 +71,7 @@ func JsonToProtoUser() {
 	log.Println(&p)
 }
 
-func randomCommunicationChannel() anypb.Any {
+func randomCommunicationChannel() *anypb.Any {
 	paperMail := basic.PaperMail{
 		PaperMailAddress: "Some paper mail address",
 	}
@@ -81,17 +87,24 @@ func randomCommunicationChannel() anypb.Any {
 	}
 
 	var a anypb.Any
+	var err error
 
-	switch r := rand.Intn(10) % 3; r {
+	// Select a random case and marshal the corresponding message into `a`.
+	switch rand.Intn(3) {
 	case 0:
-		anypb.MarshalFrom(&a, &paperMail, proto.MarshalOptions{})
+		err = anypb.MarshalFrom(&a, &paperMail, proto.MarshalOptions{})
 	case 1:
-		anypb.MarshalFrom(&a, &socialMedia, proto.MarshalOptions{})
+		err = anypb.MarshalFrom(&a, &socialMedia, proto.MarshalOptions{})
 	default:
-		anypb.MarshalFrom(&a, &instantMessaging, proto.MarshalOptions{})
+		err = anypb.MarshalFrom(&a, &instantMessaging, proto.MarshalOptions{})
 	}
 
-	return a
+	// Check for marshalling errors.
+	if err != nil {
+		log.Fatalf("Failed to marshal message: %v", err)
+	}
+
+	return &a
 }
 
 func BasicUnmarshalAnyKnown() {
@@ -148,4 +161,25 @@ func BasicUnmarshalAnyIs() {
 	} else {
 		log.Println("Not PaperMail, but :", a.TypeUrl)
 	}
+}
+
+func BasicOneof() {
+	socialMedia := basic.SocialMedia{
+		SocialMediaPlatform: "byteME",
+		SocialMediaUsername: "aquaman",
+	}
+	ecomm := basic.User_SocialMedia{
+		SocialMedia: &socialMedia,
+	}
+
+	u := basic.User{
+		Id:                    96,
+		Username:              "aquaman",
+		IsActive:              true,
+		ElectronicCommChannel: &ecomm,
+	}
+
+	jsonBytes, _ := protojson.Marshal(&u)
+	log.Println(string(jsonBytes))
+
 }

@@ -27,5 +27,11 @@ func main() {
 	// jobsearch.JobSearchSoftware()
 
 	//basic.BasicUnmarshalAnyKnown()
-	basic.BasicUnmarshalAnyIs()
+	//basic.BasicUnmarshalAnyIs()
+	//basic.BasicOneof()
+	//basic.WriteToFileSample()
+	//basic.ReadFromFileSample()
+
+	basic.WriteToJSONSample()
+	basic.ReadFromJSONSample()
 }

@@ -10,6 +10,6 @@ Software
 
 message Application {
   string version = 1;
-  string name =2;
+  string name = 2;
   repeated string platforms = 3;
 }
